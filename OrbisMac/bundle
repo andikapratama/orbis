@@ -1,0 +1,1 @@
+react-native bundle --platform osx --minify --dev false --entry-file index.osx.js --bundle-output ./osx/main.jsbundle
