@@ -13,7 +13,7 @@
  int main(int argc, char * argv[]) {
      @autoreleasepool {
          NSApplication * application = [NSApplication sharedApplication];
-         NSMenu *mainMenu = [[NSMenu alloc] initWithTitle:@"OrbisMac"];
+         NSMenu *mainMenu = [[NSMenu alloc] initWithTitle:@"OrbisMacos"];
          [NSApp setMainMenu:mainMenu];
          AppDelegate * appDelegate = [[AppDelegate alloc] init];
          [application setDelegate:appDelegate];

@@ -1,0 +1,1 @@
+react-native-macos bundle --platform macos --dev false --entry-file index.macos.js --bundle-output ./macos/main.jsbundle

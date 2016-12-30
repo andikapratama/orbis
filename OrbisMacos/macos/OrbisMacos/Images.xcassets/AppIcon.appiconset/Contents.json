@@ -3,7 +3,7 @@
     {
       "size" : "16x16",
       "idiom" : "mac",
-      "filename" : "eye-6.png",
+      "filename" : "eye-5.png",
       "scale" : "1x"
     },
     {
@@ -15,31 +15,31 @@
     {
       "size" : "32x32",
       "idiom" : "mac",
-      "filename" : "eye-5.png",
+      "filename" : "eye-6.png",
       "scale" : "1x"
     },
     {
       "size" : "32x32",
       "idiom" : "mac",
-      "filename" : "eye-2.png",
+      "filename" : "eye-4.png",
       "scale" : "2x"
     },
     {
       "size" : "128x128",
       "idiom" : "mac",
-      "filename" : "eye-7.png",
+      "filename" : "eye-8.png",
       "scale" : "1x"
     },
     {
       "size" : "128x128",
       "idiom" : "mac",
-      "filename" : "eye-1.png",
+      "filename" : "eye-2.png",
       "scale" : "2x"
     },
     {
       "size" : "256x256",
       "idiom" : "mac",
-      "filename" : "eye-8.png",
+      "filename" : "eye-7.png",
       "scale" : "1x"
     },
     {
@@ -57,7 +57,7 @@
     {
       "size" : "512x512",
       "idiom" : "mac",
-      "filename" : "eye-4.png",
+      "filename" : "eye-1.png",
       "scale" : "2x"
     }
   ],

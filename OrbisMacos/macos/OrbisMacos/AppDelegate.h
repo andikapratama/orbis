@@ -12,10 +12,9 @@
 #import "RCTBridge.h"
 
 static const NSTimeInterval PTAppReconnectDelay = 1.0;
-@interface AppDelegate
-    : NSObject<NSApplicationDelegate, NSWindowDelegate, PTChannelDelegate>
+@interface AppDelegate : NSObject <NSApplicationDelegate, NSWindowDelegate>
 
-@property(strong, nonatomic) NSWindow *window;
-@property(nonatomic, readonly) RCTBridge *bridge;
+@property (strong, nonatomic) NSWindow *window;
+@property (nonatomic, readonly) RCTBridge *bridge;
 
 @end

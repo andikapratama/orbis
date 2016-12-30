@@ -1,17 +1,54 @@
 /**
- * Sample React Native Desktop App
- * https://github.com/ptmt/react-native-desktop
+ * Sample React Native macOS App
+ * https://github.com/ptmt/react-native-macos
  */
-'use strict';
+import React from 'react';
+import ReactNative from 'react-native-macos';
+const {
+    AppRegistry,
+    StyleSheet,
+    Text,
+    Clipboard,
+    View,
+    NativeAppEventEmitter,
+    ListView,
+    Dimensions,
+    TouchableOpacity,
+    ScrollView,
+    TextInput
+} = ReactNative;
 
-var React = require('React');
-var ReactNative = require('react-native-desktop');
+class AutoExpandingTextInput extends React.Component {
+    state: any;
 
-var {AppRegistry, ListView, StyleSheet, View, NativeAppEventEmitter, Text, Dimensions, TouchableOpacity, ScrollView} = ReactNative;
+    constructor(props) {
+        super(props);
+        this.state = {
+            text: '',
+            height: 0
+        };
+    }
+    render() {
+        return (
+            <TextInput
+        {...this.props}
+        multiline={true}
+        onChange={(event) => {
+          this.setState({
+            text: event.nativeEvent.text,
+            height: event.nativeEvent.contentSize.height,
+          });
+        }}
+        style={[styles.default, {height: Math.max(35, this.state.height)}]}
+        value={this.state.text}
+      />
+        );
+    }
+}
 
 var defaultLayout = Dimensions.get('window');
 
-class OrbisMac extends React.Component {
+class OrbisMacos extends React.Component {
 
     processPacket(packet) {
         var payload = packet.payload
@@ -21,7 +58,7 @@ class OrbisMac extends React.Component {
         } else {
             payload.selected = false
             var requests = this.state.requests.concat([payload])
-            if (requests.length> 200){
+            if (requests.length > 200) {
                 requests.pop()
             }
             var datasource = this.state.dataSource.cloneWithRows(requests)
@@ -49,7 +86,7 @@ class OrbisMac extends React.Component {
         this.subscription = NativeAppEventEmitter.addListener('peertalk_new_packet', (packet) => {
             that.processPacket(packet)
         });
-      this.renderRequestRow = this.renderRequestRow.bind(this);
+        this.renderRequestRow = this.renderRequestRow.bind(this);
     }
 
     componentWillUnmount() {
@@ -60,7 +97,7 @@ class OrbisMac extends React.Component {
         if (this.state.selectedRequest !== '') {
             this.state.selectedRequest.selected = false
         }
-        
+
         request.selected = true
         this.setState({
             ...this.state,
@@ -70,31 +107,31 @@ class OrbisMac extends React.Component {
 
     clearRequest() {
         var requests = []
-            var datasource = this.state.dataSource.cloneWithRows(requests)
-            this.setState({
-                ...this.state,
-                requests: requests,
-                dataSource: datasource
-            })
+        var datasource = this.state.dataSource.cloneWithRows(requests)
+        this.setState({
+            ...this.state,
+            requests: requests,
+            dataSource: datasource
+        })
     }
 
     renderRequestRow(request) {
-      var that = this
-      var rowStyle = styles.touchableRow
-      var textStyle = styles.rowText
+        var that = this
+        var rowStyle = styles.touchableRow
+        var textStyle = styles.rowText
 
-      var path = request.path
-      if(request.base_url){
-        path = path.replace(request.base_url,'')
-      }
+        var path = request.path
+        if (request.base_url) {
+            path = path.replace(request.base_url, '')
+        }
 
-      if (this.state.selectedRequest.id === request.id) {
-        rowStyle = styles.touchedRow
-      }
+        if (this.state.selectedRequest.id === request.id) {
+            rowStyle = styles.touchedRow
+        }
 
-      if(request.error){
-        textStyle = styles.rowFailText
-      }
+        if (request.error) {
+            textStyle = styles.rowFailText
+        }
 
         return (
             <TouchableOpacity style={rowStyle} onPress={() => that.onSelectRequest(request)
@@ -103,75 +140,127 @@ class OrbisMac extends React.Component {
         {request.method + ' ' + path}
         </Text>
       </TouchableOpacity>
-            );
+        );
     }
 
     render() {
         var detail;
         var that = this
 
+        var request = this.state.selectedRequest
+
         if (this.state.selectedRequest === "") {
             detail = (<Welcome />);
         } else {
             if (this.state.selectedRequest.error) {
+                detail = (
 
-            detail = (
-
-        <ScrollView showsVerticalScrollIndicator={true}>
+                    <ScrollView showsVerticalScrollIndicator={true}>
                 <View style={styles.detailContainer}> 
         <Text style={styles.welcomeText}>
         {this.state.selectedRequest.method + ' ' + this.state.selectedRequest.path}
         </Text>
+        <View style={{flex: 1, flexDirection: 'row'}}>
         <Text style={styles.headerText}>
         Error
         </Text>
+              <TouchableOpacity
+        onPress={() => Clipboard.setString(request.error)}>
+        <Text style={styles.headerCopyText}>
+          Copy to Clipboard
+        </Text>
+      </TouchableOpacity>
+        </View>
         <Text style={styles.contentText}>
         {this.state.selectedRequest.error}
         </Text>
+
+      <View style={{flex: 1, flexDirection: 'row'}}>
         <Text style={styles.headerText}>
         Parameters
         </Text>
+              <TouchableOpacity
+        onPress={() => Clipboard.setString(request.params)}>
+        <Text style={styles.headerCopyText}>
+          Copy to Clipboard
+        </Text>
+      </TouchableOpacity>
+        </View>
         <Text style={styles.contentText}>
         {this.state.selectedRequest.params}
         </Text>
+<View style={{flex: 1, flexDirection: 'row'}}>
         <Text style={styles.headerText}>
         Header
         </Text>
+              <TouchableOpacity
+        onPress={() => Clipboard.setString(request.header)}>
+        <Text style={styles.headerCopyText}>
+          Copy to Clipboard
+        </Text>
+      </TouchableOpacity>
+        </View>
         <Text style={styles.contentText}>
         {this.state.selectedRequest.header}
         </Text>
         </View>
         </ScrollView>
-            );
+                );
             } else {
-            detail = (
+                detail = (
 
-        <ScrollView showsVerticalScrollIndicator={true}>
+                    <ScrollView showsVerticalScrollIndicator={true}>
                 <View style={styles.detailContainer}> 
         <Text style={styles.welcomeText}>
         {this.state.selectedRequest.method + ' ' + this.state.selectedRequest.path}
         </Text>
+      <View style={{flex: 1, flexDirection: 'row'}}>
         <Text style={styles.headerText}>
         Response
         </Text>
+              <TouchableOpacity
+        onPress={() => Clipboard.setString(request.response)}>
+        <Text style={styles.headerCopyText}>
+          Copy to Clipboard
+        </Text>
+      </TouchableOpacity>
+        </View>
         <Text style={styles.contentText}>
         {this.state.selectedRequest.response}
         </Text>
+
+      <View style={{flex: 1, flexDirection: 'row'}}>
         <Text style={styles.headerText}>
         Parameters
         </Text>
+              <TouchableOpacity
+        onPress={() => Clipboard.setString(request.params)}>
+        <Text style={styles.headerCopyText}>
+          Copy to Clipboard
+        </Text>
+      </TouchableOpacity>
+        </View>
         <Text style={styles.contentText}>
         {this.state.selectedRequest.params}
         </Text>
+
+      <View style={{flex: 1, flexDirection: 'row'}}>
         <Text style={styles.headerText}>
         Header
         </Text>
-        <Text style={styles.contentText}>
+              <TouchableOpacity
+        onPress={() => Clipboard.setString(request.header)}>
+        <Text style={styles.headerCopyText}>
+          Copy to Clipboard
+        </Text>
+      </TouchableOpacity>
+        </View>
+                <Text style={styles.contentText}>
         {this.state.selectedRequest.header}
         </Text>
         </View>
         </ScrollView>
-            );
+                );
             }
         }
 
@@ -201,12 +290,11 @@ class OrbisMac extends React.Component {
             {detail}
         </View>
       </View>
-            );
+        );
     }
 
 
-}
-;
+};
 
 class Welcome extends React.Component {
     render() {
@@ -214,7 +302,7 @@ class Welcome extends React.Component {
             <View style={styles.welcomeWrapper}>
         <Text style={styles.welcomeText}>Welcome to Orbis!</Text>
       </View>
-            );
+        );
     }
 }
 
@@ -260,16 +348,32 @@ var styles = StyleSheet.create({
         marginTop: 8,
         marginBottom: 8
     },
+    selectableText: {
+        height: 260,
+        borderWidth: 0.5,
+        borderColor: '#0f0f0f',
+        flex: 1,
+        fontSize: 13,
+        padding: 4,
+    },
 
     clearText: {
         color: '#999',
         fontSize: 20,
         marginTop: 16,
         marginBottom: 8,
-        textAlign : 'center'
+        textAlign: 'center'
     },
     headerText: {
         color: '#6d7cff',
+        marginLeft: 8,
+        marginRight: 8,
+        fontSize: 15,
+        paddingTop: 8
+    },
+    headerCopyText: {
+        color: '#4C7D4C',
+        marginLeft: 8,
         fontSize: 15,
         paddingTop: 8
     },
@@ -287,5 +391,4 @@ var styles = StyleSheet.create({
     },
 });
 
-AppRegistry.registerComponent('OrbisMac', () => OrbisMac);
-
+AppRegistry.registerComponent('OrbisMacos', () => OrbisMacos);
