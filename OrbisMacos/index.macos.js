@@ -47,6 +47,14 @@ class AutoExpandingTextInput extends React.Component {
 }
 
 var defaultLayout = Dimensions.get('window')
+const formatForPostman = input => {
+  let jsonInput = JSON.parse(input)
+  return Object.keys(jsonInput).reduce(
+    (prev, curr) => prev.concat(curr, ': ', jsonInput[curr], '\n'),
+    ''
+  )
+}
+  
 
 class OrbisMacos extends React.Component {
   processPacket(packet) {
@@ -174,7 +182,6 @@ class OrbisMacos extends React.Component {
                 <Text style={styles.headerText}>Error</Text>
                 <TouchableOpacity
                   onPress={() => {
-                    console.log('asdasdasdsd')
                     return Clipboard.setString(request.error)
                   }}
                 >
@@ -202,6 +209,15 @@ class OrbisMacos extends React.Component {
                   onPress={() => Clipboard.setString(request.header)}
                 >
                   <Text style={styles.headerCopyText}>Copy to Clipboard</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() =>
+                    Clipboard.setString(formatForPostman(request.header))
+                  }
+                >
+                  <Text style={styles.headerCopyTextAlt}>
+                    Copy to Clipboard for Postman
+                  </Text>
                 </TouchableOpacity>
               </View>
               <Text style={styles.contentText}>
@@ -255,6 +271,15 @@ class OrbisMacos extends React.Component {
                   onPress={() => Clipboard.setString(request.header)}
                 >
                   <Text style={styles.headerCopyText}>Copy to Clipboard</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() =>
+                    Clipboard.setString(formatForPostman(request.header))
+                  }
+                >
+                  <Text style={styles.headerCopyTextAlt}>
+                    Copy to Clipboard for Postman
+                  </Text>
                 </TouchableOpacity>
               </View>
               <Text style={styles.contentText}>
@@ -381,6 +406,12 @@ var styles = StyleSheet.create({
   },
   headerCopyText: {
     color: '#4C7D4C',
+    marginLeft: 8,
+    fontSize: 15,
+    paddingTop: 8
+  },
+  headerCopyTextAlt: {
+    color: '#1C4D8C',
     marginLeft: 8,
     fontSize: 15,
     paddingTop: 8
